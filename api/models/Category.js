@@ -17,11 +17,14 @@ module.exports = {
   		type: 'STRING',
   		required: true
   	},
-  	image: 'STRING',
+  	image_id: 'INTEGER',
   	parent_id: {
-  		model: 'category',
+  		type: 'INTEGER',
   		defaultsTo: 0
   	},
+    description: {
+      type: 'TEXT'
+    },
   	sort_order: {
   		type: 'INTEGER',
   		defaultsTo: 0

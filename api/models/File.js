@@ -1,27 +1,28 @@
 /**
-* User.js
+* File.js
 *
 * @description :: TODO: You might write a short summary of how this model works and what it represents here.
 * @docs        :: http://sailsjs.org/#!documentation/models
 */
 
 module.exports = {
-	
   attributes: {
-  	email: {
-			type: 'email',
-			required: true
-		},
-		name: {
+		filename: {
 			type: 'STRING',
 			required: true
 		},
-		password: {
+		size: {
 			type: 'STRING',
 			required: true
 		},
-		token: 'STRING'
+		type: {
+			type: 'STRING',
+			required: true
+		},
+		owner: {
+			type: 'INT',
+			required: true
+		}
   }
-
 };
 

@@ -50,5 +50,10 @@ module.exports.policies = {
 	// }
   FileController: {
     upload: 'isAuthenticated'
+  },
+  CategoryController: {
+    update: 'isAuthenticated',
+    create: 'isAuthenticated',
+    delete: 'isAuthenticated'
   }
 };

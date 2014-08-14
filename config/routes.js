@@ -32,10 +32,6 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': {
-    view: 'homepage'
-  },
-
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *
@@ -45,5 +41,47 @@ module.exports.routes = {
   * for configuration options and examples.                                  *
   *                                                                          *
   ***************************************************************************/
-
+  'post /user/api_login': {
+    controller: 'UserController',
+    action: 'api_login',
+    cors: {
+      origin: '*'
+    }
+  },
+  'post /file/upload': {
+    controller: 'FileController',
+    action: 'upload',
+    cors: {
+      origin: '*'
+    }
+  },
+  'get /media/:id': {
+    controller: 'FileController',
+    action: 'get',
+    cors: {
+      origin: '*'
+    }
+  },
+  'get /category': {
+    cors: {
+      origin: '*'
+    }
+  },
+  'post /category/update/:id': {
+    cors: {
+      origin: '*'
+    }
+  },
+  'post /category/create': {
+    cors: {
+      origin: '*'
+    }
+  },
+  'post /category/delete': {
+    controller: 'CategoryController',
+    action: 'delete',
+    cors: {
+      origin: '*'
+    }
+  }
 };
