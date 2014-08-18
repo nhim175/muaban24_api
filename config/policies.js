@@ -55,5 +55,9 @@ module.exports.policies = {
     update: 'isAuthenticated',
     create: 'isAuthenticated',
     delete: 'isAuthenticated'
-  }
+  },
+  UserController: {
+    update: 'isAuthenticated',
+    delete: 'isAuthenticated'
+  },
 };

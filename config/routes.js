@@ -60,6 +60,20 @@ module.exports.routes = {
     }
   },
 
+  'post /user/create': {
+    cors: {
+      origin: '*'
+    }
+  },
+
+  'post /user/delete': {
+    controller: 'UserController',
+    action: 'delete',
+    cors: {
+      origin: '*'
+    }
+  },
+
   'post /file/upload': {
     controller: 'FileController',
     action: 'upload',

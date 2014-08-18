@@ -36,6 +36,15 @@ module.exports = {
         });
       }
     });
+  },
+
+  delete: function(req, res) {
+    ids = JSON.parse(req.param('ids'));
+    if (ids.length == 0) return res.send("user empty", 411);
+    User.destroy({id: ids}).exec(function(err, users) {
+      if (err) return res.send(err,500);
+      res.json(users);
+    });
   }
 };
 
