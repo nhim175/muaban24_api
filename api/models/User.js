@@ -5,12 +5,16 @@
 * @docs        :: http://sailsjs.org/#!documentation/models
 */
 
+var md5 = require('MD5');
+
 module.exports = {
 	
   attributes: {
   	email: {
 			type: 'email',
-			required: true
+			required: true,
+			unique: true,
+			index: true
 		},
 		name: {
 			type: 'STRING',
@@ -20,7 +24,40 @@ module.exports = {
 			type: 'STRING',
 			required: true
 		},
+		profile_image: 'INTEGER',
+		phone: 'STRING',
+		address: 'STRING',
+		yahoo: 'STRING',
+		skype: 'STRING',
+		facebook: 'STRING',
 		token: 'STRING'
+  },
+
+  beforeCreate: function(values, cb) {
+  	if (!values.password) {
+  		cb('Can not create user');
+  	} else {
+  		values.password = md5(values.password);
+  		cb();
+  	}
+  },
+
+  beforeValidate: function(values, cb) {
+  	if (!values.password) {
+  		delete values.password;
+  	}
+  	cb();
+  },
+
+  beforeUpdate: function(values, cb) {
+  	if (values.password) values.password = md5(values.password);
+  	cb();
+  },
+
+  toJSON: function() {
+    var obj = this.toObject();
+    delete obj.password;
+    return obj;
   }
 
 };

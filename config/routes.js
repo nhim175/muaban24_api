@@ -48,6 +48,18 @@ module.exports.routes = {
       origin: '*'
     }
   },
+  'get /user': {
+    cors: {
+      origin: '*'
+    }
+  },
+
+  'post /user/update/:id': {
+    cors: {
+      origin: '*'
+    }
+  },
+
   'post /file/upload': {
     controller: 'FileController',
     action: 'upload',

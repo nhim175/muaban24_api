@@ -6,8 +6,19 @@
  */
 var md5 = require('MD5');
 var hat = require('hat');
+var _ = require('underscore');
 
 module.exports = {
+  index: function(req, res) {
+    User.find().exec(function(err, users) {
+      if (err) return res.send(err, 500);
+      _.each(users, function(user) {
+        delete user.password;
+      });
+      return res.json(users);
+    });
+  },
+
   api_login: function(req, res) {
     var email = req.param('email');
     var password = req.param('password');
