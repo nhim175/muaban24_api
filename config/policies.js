@@ -49,7 +49,9 @@ module.exports.policies = {
 		// feed : ['isNiceToAnimals', 'hasRabbitFood']
 	// }
   FileController: {
-    upload: 'isAuthenticated'
+    index: 'isAuthenticated',
+    upload: 'isAuthenticated',
+    uploads: 'isAuthenticated'
   },
   CategoryController: {
     update: 'isAuthenticated',

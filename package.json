@@ -23,7 +23,8 @@
     "grunt-contrib-less": "0.11.1",
     "grunt-contrib-coffee": "~0.10.1",
     "MD5": "^1.2.1",
-    "hat": "0.0.3"
+    "hat": "0.0.3",
+    "gm": "^1.16.0"
   },
   "scripts": {
     "start": "node app.js",

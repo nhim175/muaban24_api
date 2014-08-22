@@ -48,6 +48,7 @@ module.exports.routes = {
       origin: '*'
     }
   },
+
   'get /user': {
     cors: {
       origin: '*'
@@ -81,6 +82,21 @@ module.exports.routes = {
       origin: '*'
     }
   },
+
+  'post /file/uploads': {
+    controller: 'FileController',
+    action: 'uploads',
+    cors: {
+      origin: '*'
+    }
+  },
+
+  'get /file': {
+    cors: {
+      origin: '*'
+    }
+  },
+
   'get /media/:id': {
     controller: 'FileController',
     action: 'get',
@@ -88,6 +104,21 @@ module.exports.routes = {
       origin: '*'
     }
   },
+
+  'get /media/thumb/:size/:id': {
+    controller: 'FileController',
+    action: 'get_thumb',
+    cors: {
+      origin: '*'
+    }
+  },
+
+  'get /file': {
+    cors: {
+      origin: '*'
+    }
+  },
+
   'get /category': {
     cors: {
       origin: '*'
