@@ -22,6 +22,14 @@ module.exports = {
 		owner: {
 			type: 'INT',
 			required: true
+		},
+
+		isPhoto: function() {
+			return /image\/png|image\/gif|image\/jpeg/.test(this.type);
+		},
+
+		getExtension: function() {
+			return this.filename.match(/\.([A-z0-9]*)$/)[1];
 		}
   }
 };

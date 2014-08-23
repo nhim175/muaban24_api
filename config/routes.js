@@ -83,14 +83,6 @@ module.exports.routes = {
     }
   },
 
-  'post /file/uploads': {
-    controller: 'FileController',
-    action: 'uploads',
-    cors: {
-      origin: '*'
-    }
-  },
-
   'get /file': {
     cors: {
       origin: '*'

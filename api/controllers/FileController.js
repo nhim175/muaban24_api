@@ -8,6 +8,7 @@ var uuid = require('node-uuid');
 var fs = require('fs');
 var gm = require('gm');
 var UPLOAD_ROOT = './upload';
+var ICON_ROOT = './assets/images/file-type-icons'
 
 module.exports = {
 
@@ -46,15 +47,31 @@ module.exports = {
 		var height = size[1];
 		if (width > sails.config.files.MAX_THUMB_WIDTH || height > sails.config.files.MAX_THUMB_HEIGHT) {
 			sails.log.error('trying to get a oversize thumb', size);
-			return res.send(404, 'Not found');
+			return res.send(400, 'Bad request');
 		} 
 		File.findOne({id: file_id}).exec(function(err, file) {
-			gm(UPLOAD_ROOT + '/' + file.owner + '/' + file.filename)
-			.resize(width,height, '^')
-			.gravity('Center')
-			.crop(width, height)
-			.stream()
-			.pipe(res);
+			if (err) {
+				sails.log.error('file not found', file_id);
+				res.send(404, 'Not found');
+			}
+			var file_path;
+			if (file.isPhoto()) {
+				file_path = UPLOAD_ROOT + '/' + file.owner + '/' + file.filename;
+				gm(file_path)
+				.resize(width,height, '^')
+				.gravity('Center')
+				.crop(width, height)
+				.stream()
+				.pipe(res);
+			} else {
+				file_path = ICON_ROOT + '/' + file.getExtension() + '.png';
+				gm(file_path)
+				.resize(null,height, '^')
+				.gravity('Center')
+				.extent(width, height)
+				.stream()
+				.pipe(res);
+			}
 		});
 	},
 
