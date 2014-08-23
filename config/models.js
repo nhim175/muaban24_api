@@ -19,4 +19,5 @@ module.exports.models = {
   ***************************************************************************/
 
   // connection: 'localDiskDb'
+  connection: 'localMysql'
 };
