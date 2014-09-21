@@ -31,9 +31,14 @@ module.exports = {
 				sails.log.error('File not found', file_id);
 				return res.send(404, 'File not found');
 			}
-			res.sendfile(UPLOAD_ROOT + '/' + file.owner + '/' + file.filename);
+      res.sendfile(UPLOAD_ROOT + '/' + file.owner + '/' + file.filename);
 		});
 	},
+
+  public_get: function(req, res) {
+    var name = req.param('name');
+    res.sendfile(UPLOAD_ROOT + '/public/' + name);
+  },
 
 	get_thumb: function(req, res) {
 		var file_id = req.param('id');
@@ -105,6 +110,22 @@ module.exports = {
 				});
 			});
 		});
-	}
+	},
+
+  public_upload: function(req, res) {
+    var filename = uuid.v1() + '.png';
+    var upload_dir = UPLOAD_ROOT + '/public/' + filename;
+    sails.log('Someone is uploading a file');
+    var imageData = req.param('data').replace(/^data:image\/png;base64,/, "");
+    fs.writeFile(upload_dir, imageData, 'base64', function(err) {
+      if (err) {
+        sails.log.error('Upload fail', err);
+        return res.serverError(err);
+      }
+      return res.json({
+        file: filename
+      });
+    });
+  }
 };
 

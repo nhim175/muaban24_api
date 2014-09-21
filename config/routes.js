@@ -41,96 +41,24 @@ module.exports.routes = {
   * for configuration options and examples.                                  *
   *                                                                          *
   ***************************************************************************/
-  'post /user/api_login': {
-    controller: 'UserController',
-    action: 'api_login',
-    cors: {
-      origin: '*'
-    }
-  },
 
-  'get /user': {
-    cors: {
-      origin: '*'
-    }
-  },
+  /**/
+  "OPTIONS /*": function (req, res) { res.send(200); },
+  
+  'POST /user/api_login': 'UserController.api_login',
 
-  'post /user/update/:id': {
-    cors: {
-      origin: '*'
-    }
-  },
+  // Alias for user/create
+  'POST /user/signup': 'UserController.create',
 
-  'post /user/create': {
-    cors: {
-      origin: '*'
-    }
-  },
+  'POST /user/delete': 'UserController.delete',
 
-  'post /user/delete': {
-    controller: 'UserController',
-    action: 'delete',
-    cors: {
-      origin: '*'
-    }
-  },
+  'POST /file/upload': 'FileController.upload',
 
-  'post /file/upload': {
-    controller: 'FileController',
-    action: 'upload',
-    cors: {
-      origin: '*'
-    }
-  },
+  'GET /media/:id': 'FileController.get',
 
-  'get /file': {
-    cors: {
-      origin: '*'
-    }
-  },
+  'GET /media/public/:name': 'FileController.public_get',
 
-  'get /media/:id': {
-    controller: 'FileController',
-    action: 'get',
-    cors: {
-      origin: '*'
-    }
-  },
+  'GET /media/thumb/:size/:id': 'FileController.get_thumb',
 
-  'get /media/thumb/:size/:id': {
-    controller: 'FileController',
-    action: 'get_thumb',
-    cors: {
-      origin: '*'
-    }
-  },
-
-  'get /file': {
-    cors: {
-      origin: '*'
-    }
-  },
-
-  'get /category': {
-    cors: {
-      origin: '*'
-    }
-  },
-  'post /category/update/:id': {
-    cors: {
-      origin: '*'
-    }
-  },
-  'post /category/create': {
-    cors: {
-      origin: '*'
-    }
-  },
-  'post /category/delete': {
-    controller: 'CategoryController',
-    action: 'delete',
-    cors: {
-      origin: '*'
-    }
-  }
+  'POST /category/delete': 'CategoryController.delete'
 };

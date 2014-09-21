@@ -50,7 +50,8 @@ module.exports = {
         sails.log.error('Update user', user_id, 'failed with error', err);
         return res.send(err, 500);
       }
-      return res.json(result);
+      delete result[0].password;
+      return res.json(result[0]);
     });
   },
 
