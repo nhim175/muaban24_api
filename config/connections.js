@@ -52,7 +52,9 @@ module.exports.connections = {
     adapter: 'sails-mysql',
     user: 'root',
     host: 'localhost',
-    database: 'muaban24'
+    database: 'muaban24',
+    charset   : 'utf8',
+    collation : 'utf8_general_ci'
   },
 
   /***************************************************************************

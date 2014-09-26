@@ -62,4 +62,9 @@ module.exports.policies = {
     update: 'isAuthenticated',
     delete: 'isAuthenticated'
   },
+
+  ProductController: {
+    create: 'isAuthenticated',
+    update: 'isProductOwner'
+  }
 };
