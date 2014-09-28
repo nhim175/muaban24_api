@@ -19,6 +19,17 @@ module.exports = {
     });
   },
 
+  get: function(req, res) {
+    var user_id = req.param('id');
+    User.findOne({id: user_id}).exec(function(err, user) {
+      if (err) {
+        sails.log.error('User not found', user_id);
+        return res.send(404, 'User not found');
+      }
+      res.json(user.publicData());
+    });
+  },
+
   api_login: function(req, res) {
     var email = req.param('email');
     var password = req.param('password');

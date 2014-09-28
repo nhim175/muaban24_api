@@ -60,7 +60,8 @@ module.exports.policies = {
   },
   UserController: {
     update: 'isAuthenticated',
-    delete: 'isAuthenticated'
+    delete: 'isAuthenticated',
+    get: 'isAuthenticated'
   },
 
   ProductController: {

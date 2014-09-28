@@ -9,6 +9,7 @@ var fs = require('fs');
 var gm = require('gm');
 var UPLOAD_ROOT = './upload';
 var ICON_ROOT = './assets/images/file-type-icons'
+var thumb_sizes = [128, 256];
 
 module.exports = {
 
@@ -104,6 +105,29 @@ module.exports = {
 					sails.log.error('Can not add file to db', err);
 					return res.serverError(err);
 				}
+        //Create thumbs for products
+        if(file.isPhoto()) {
+          var input = upload_dir + '/' + new_name;
+          var size, _i, _len;
+
+          for (_i = 0, _len = thumb_sizes.length; _i < _len; _i++) {
+            size = thumb_sizes[_i];
+            if (!fs.existsSync(upload_dir + '/' + size + "x" + size)) fs.mkdirSync(upload_dir + '/' + size + "x" + size);
+            gm(input).resize(size, size, '^').gravity('Center').crop(size, size).stream(function(err, stdout, stderr) {
+              var output, error, writeStream;
+              output = "" + upload_dir + "/" + size + "x" + size + "/" + new_name;
+              error = "" + upload_dir + "/" + size + "x" + size + "/error.txt";
+              writeStream = fs.createWriteStream(output, {
+                encoding: 'base64'
+              });
+              errorStream = fs.createWriteStream(error);
+              stderr.pipe(errorStream);
+              return stdout.pipe(writeStream);
+            });
+          }
+
+        }
+
 				return res.json({
 					message: files.length + ' file(s) uploaded successfully!',
 					file: file

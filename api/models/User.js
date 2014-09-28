@@ -24,13 +24,28 @@ module.exports = {
 			type: 'STRING',
 			required: true
 		},
-		profile_image: 'INTEGER',
+		profile_image: 'STRING',
 		phone: 'STRING',
 		address: 'STRING',
 		yahoo: 'STRING',
 		skype: 'STRING',
 		facebook: 'STRING',
-		token: 'STRING'
+		token: 'STRING',
+
+    publicData: function() {
+      var obj = this.toObject();
+      delete obj.password;
+      delete obj.email;
+      delete obj.token;
+      return obj;
+    },
+
+    toJSON: function() {
+      var obj = this.toObject();
+      delete obj.password;
+      return obj;
+    }
+
   },
 
   beforeCreate: function(values, cb) {
@@ -52,13 +67,8 @@ module.exports = {
   beforeUpdate: function(values, cb) {
   	if (values.password) values.password = md5(values.password);
   	cb();
-  },
-
-  toJSON: function() {
-    var obj = this.toObject();
-    delete obj.password;
-    return obj;
   }
 
+  
 };
 

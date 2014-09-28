@@ -52,6 +52,8 @@ module.exports.routes = {
 
   'POST /user/delete': 'UserController.delete',
 
+  'GET /user/:id': 'UserController.get',
+
   'POST /file/upload': 'FileController.upload',
 
   'GET /media/:id': 'FileController.get',
