@@ -66,6 +66,11 @@ module.exports.policies = {
 
   ProductController: {
     create: 'isAuthenticated',
-    update: 'isProductOwner'
+    update: 'isProductOwner',
+    get_comments: 'isAuthenticated'
+  },
+
+  CommentController: {
+    create: 'isAuthenticated'
   }
 };

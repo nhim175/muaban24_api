@@ -62,5 +62,7 @@ module.exports.routes = {
 
   'GET /media/thumb/:size/:id': 'FileController.get_thumb',
 
-  'POST /category/delete': 'CategoryController.delete'
+  'POST /category/delete': 'CategoryController.delete',
+
+  'GET /product/:id/comments': 'ProductController.get_comments'
 };
