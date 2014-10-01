@@ -13,5 +13,15 @@ module.exports = {
 			if (err) return res.send(err,500);
 			res.json(categories);
 		});
-	}
+	},
+
+  get_products: function(req, res) {
+    var id = req.param('id');
+    Product.find({where: {categories: {contains: id}}, sort: 'createdAt ASC'}).exec(function(err, products) {
+      if (err) {
+        return res.send(404, 'Products not found');
+      }
+      return res.json(products);
+    });
+  }
 };
