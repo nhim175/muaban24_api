@@ -66,5 +66,11 @@ module.exports.routes = {
 
   'GET /product/:id/comments': 'ProductController.get_comments',
 
+  'POST /product/:id/like': 'ProductController.like_product',
+
+  'POST /product/:id/unlike': 'ProductController.unlike_product',
+
+  'GET /product/:id/likes': 'ProductController.get_likes',
+
   'GET /category/:id/products': 'CategoryController.get_products'
 };

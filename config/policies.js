@@ -60,14 +60,14 @@ module.exports.policies = {
   },
   UserController: {
     update: 'isAuthenticated',
-    delete: 'isAuthenticated',
-    get: 'isAuthenticated'
+    delete: 'isAuthenticated'
   },
 
   ProductController: {
     create: 'isAuthenticated',
     update: 'isProductOwner',
-    get_comments: 'isAuthenticated'
+    like_product: 'isAuthenticated',
+    unlike_product: 'isAuthenticated'
   },
 
   CommentController: {

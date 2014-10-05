@@ -12,8 +12,8 @@ module.exports = {
   index: function(req, res) {
     User.find().exec(function(err, users) {
       if (err) return res.send(err, 500);
-      _.each(users, function(user) {
-        delete user.password;
+      var users = _.map(users, function(user) {
+        return user.toJSON();
       });
       return res.json(users);
     });

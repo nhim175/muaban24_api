@@ -24,7 +24,8 @@
     "grunt-contrib-coffee": "~0.10.1",
     "MD5": "^1.2.1",
     "hat": "0.0.3",
-    "gm": "^1.16.0"
+    "gm": "^1.16.0",
+    "underscore": "^1.7.0"
   },
   "scripts": {
     "start": "node app.js",
