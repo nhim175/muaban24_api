@@ -54,6 +54,8 @@ module.exports.routes = {
 
   'GET /user/:id': 'UserController.get',
 
+  'GET /user/:id/products': 'UserController.get_products',
+
   'POST /file/upload': 'FileController.upload',
 
   'GET /media/:id': 'FileController.get',
@@ -71,6 +73,8 @@ module.exports.routes = {
   'POST /product/:id/unlike': 'ProductController.unlike_product',
 
   'GET /product/:id/likes': 'ProductController.get_likes',
+
+  'GET /product/search/:query': 'ProductController.search',
 
   'GET /category/:id/products': 'CategoryController.get_products'
 };

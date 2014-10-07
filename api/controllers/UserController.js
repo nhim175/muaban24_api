@@ -78,6 +78,28 @@ module.exports = {
       sails.log('User', req.session.user.id, 'deleted users', ids, 'successfully!');
       return res.json(users);
     });
+  },
+
+  get_products: function(req, res) {
+    var id = req.param('id');
+    Product.find({where: {userId: id}, sort: 'createdAt ASC'}).exec(function(err, products) {
+      if (err) return res.send(500, err);
+      var products = _.map(products, function(product) { return product.toObject(); });
+      var productIds = _.pluck(products, 'id');
+      ProductLike.find({productId: productIds}).exec(function(err, likes) {
+        if (err) return res.send(500, err);
+        var likesByProductId = _.countBy(likes, function(like) { return like.productId; });
+        Comment.find({productId: productIds}).exec(function(err, comments) {
+          var commentsByProductId = _.countBy(comments, function(comment) { return comment.productId; });
+          var result = _.map(products, function(product) {
+            product.likes = likesByProductId[product.id] || 0;
+            product.comments = commentsByProductId[product.id] || 0;
+            return product;
+          });
+          return res.json(result);
+        });
+      });
+    });
   }
 };
 
