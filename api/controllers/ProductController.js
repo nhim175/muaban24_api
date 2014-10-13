@@ -9,29 +9,48 @@ var _ = require('underscore');
 
 module.exports = {
   index: function(req, res) {
-    Product.find().exec(function(err, products) {
+    Product.find().populate('likes').populate('comments').populate('user').populate('categories').populate('images').exec(function(err, products) {
       if (err) return res.send(500, err);
-      var products = _.map(products, function(product) { return product.toObject(); });
-      var productIds = _.pluck(products, 'id');
-      ProductLike.find({productId: productIds}).exec(function(err, likes) {
-        if (err) return res.send(500, err);
-        var likesByProductId = _.countBy(likes, function(like) { return like.productId; });
-        Comment.find({productId: productIds}).exec(function(err, comments) {
-          var commentsByProductId = _.countBy(comments, function(comment) { return comment.productId; });
-          var result = _.map(products, function(product) {
-            product.likes = likesByProductId[product.id] || 0;
-            product.comments = commentsByProductId[product.id] || 0;
-            return product;
-          });
-          return res.json(result);
+      res.json(products);
+    });
+  },
+
+  get: function(req, res) {
+    var id = req.param('id');
+    async.auto({
+      product: function(cb) {
+        Product.findOne(id)
+          .populate('user')
+          .populate('likes')
+          .populate('images')
+          .populate('comments')
+          .populate('categories')
+          .exec(cb);
+      },
+      commentUsers: ['product', function(cb, results) {
+        User.find({id: _.pluck(results.product.comments, 'user')})
+          .exec(cb);
+      }],
+      map: ['commentUsers', function(cb, results) {
+        var users = _.indexBy(results.commentUsers, 'id');
+        var product = results.product.toObject();
+        product.comments = product.comments.map(function(comment) {
+          comment.user = users[comment.user];
+          return comment;
         });
-      });
+        return cb(null, product);
+      }]
+    },
+
+    function finish(err, result) {
+      if(err) return res.serverError(err);
+      return res.json(_.clone(result.map));
     });
   },
 
 	create: function(req, res) {
     var data = req.allParams();
-    data.userId = req.session.user.id;
+    data.user = req.session.user.id;
     sails.log.debug('user', req.session.user.id, 'is creating a new product');
     Product.create(data).exec(function(err, product) {
       if (err) {
@@ -56,8 +75,8 @@ module.exports = {
   like_product: function(req, res) {
     var productId = req.param('id');
     var data = {
-      userId: req.session.user.id,
-      productId: productId
+      user: req.session.user.id,
+      product: productId
     };
     ProductLike.create(data).exec(function(err, likeObject) {
       if (err) {
@@ -70,8 +89,8 @@ module.exports = {
   unlike_product: function(req, res) {
     var productId = req.param('id');
     var data = {
-      userId: req.session.user.id,
-      productId: productId
+      user: req.session.user.id,
+      product: productId
     };
     ProductLike.destroy(data).exec(function(err) {
       if (err) {
@@ -97,24 +116,15 @@ module.exports = {
 
   search: function(req, res) {
     var queryString = req.param('query');
-    Product.find({ title: { 'like': '%'+queryString+'%'}}).exec(function(err, products) {
+    Product.find({ title: { 'like': '%'+queryString+'%'}})
+    .populate('images')
+    .populate('comments')
+    .populate('likes')
+    .populate('user')
+    .exec(function(err, products) {
       // TODO: Repeat code
       if (err) return res.send(500, err);
-      var products = _.map(products, function(product) { return product.toObject(); });
-      var productIds = _.pluck(products, 'id');
-      ProductLike.find({productId: productIds}).exec(function(err, likes) {
-        if (err) return res.send(500, err);
-        var likesByProductId = _.countBy(likes, function(like) { return like.productId; });
-        Comment.find({productId: productIds}).exec(function(err, comments) {
-          var commentsByProductId = _.countBy(comments, function(comment) { return comment.productId; });
-          var result = _.map(products, function(product) {
-            product.likes = likesByProductId[product.id] || 0;
-            product.comments = commentsByProductId[product.id] || 0;
-            return product;
-          });
-          return res.json(result);
-        });
-      });
+      res.json(products);
     });
   }
 };

@@ -12,12 +12,12 @@ module.exports = {
       type: 'string',
       required: true
     },
-    productId: {
-      type: 'integer',
+    product: {
+      model: 'product',
       required: true
     },
-    userId: {
-      type: 'integer',
+    user: {
+      model: 'user',
       required: true
     }
   }

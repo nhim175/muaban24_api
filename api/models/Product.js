@@ -13,7 +13,8 @@ module.exports = {
       required: true
     },
     categories: {
-      type: 'array',
+      collection: 'category',
+      via: 'products',
       required: true
     },
     description: {
@@ -51,13 +52,21 @@ module.exports = {
       type: 'string'
     },
     images: {
-      type: 'array',
+      collection: 'file',
       required: true,
       notEmpty: true
     },
-    userId: {
-      type: 'integer',
+    user: {
+      model: 'user',
       required: true
+    },
+    likes: {
+      collection: 'productlike',
+      via: 'product'
+    },
+    comments: {
+      collection: 'comment',
+      via: 'product'
     }
   }
 };

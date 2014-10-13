@@ -8,7 +8,7 @@
 module.exports = {
 	create: function(req, res) {
     var data = req.allParams();
-    data.userId = req.session.user.id;
+    data.user = req.session.user.id;
     sails.log.debug('user', req.session.user.id, 'is posting a comment');
     Comment.create(data).exec(function(err, comment) {
       if (err) {

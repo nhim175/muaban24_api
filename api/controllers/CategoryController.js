@@ -6,6 +6,14 @@
  */
 
 module.exports = {
+
+  index: function(req, res) {
+    Category.find().exec(function(err, categories){
+      if (err) return res.send(500, '');
+      res.json(categories);
+    });
+  },
+
 	delete: function(req, res) {
 		ids = JSON.parse(req.param('ids'));
 		if (ids.length == 0) return res.send("category empty", 411);
@@ -15,13 +23,30 @@ module.exports = {
 		});
 	},
 
-  get_products: function(req, res) {
-    var id = req.param('id');
-    Product.find({where: {categories: {contains: id}}, sort: 'createdAt ASC'}).exec(function(err, products) {
-      if (err) {
-        return res.send(404, 'Products not found');
-      }
-      return res.json(products);
+  get: function(req, res) {
+    var id = parseInt(req.param('id'));
+    async.auto({
+      category: function(cb) {
+        Category.findOne(id).populate('products').exec(cb);
+      },
+      categoryProducts: ['category', function(cb, results) {
+        Product.find({id: _.pluck(results.category.products, 'id')})
+          .populate('user')
+          .populate('images')
+          .populate('comments')
+          .populate('likes')
+          .exec(cb);
+      }],
+      map: ['categoryProducts', function(cb, results) {
+        var category = results.category.toObject();
+        category.products = results.categoryProducts;
+        return cb(null, category);
+      }]
+    },
+
+    function finish(err, results) {
+      if(err) return res.serverError(err);
+      return res.json(_.clone(results.map));
     });
   }
 };

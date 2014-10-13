@@ -56,6 +56,10 @@ module.exports.routes = {
 
   'GET /user/:id/products': 'UserController.get_products',
 
+  'GET /message/:userId': 'MessageController.get_by_user',
+
+  'POST /message': 'MessageController.create',
+
   'POST /file/upload': 'FileController.upload',
 
   'GET /media/:id': 'FileController.get',
@@ -68,6 +72,8 @@ module.exports.routes = {
 
   'GET /product/:id/comments': 'ProductController.get_comments',
 
+  'GET /product/:id': 'ProductController.get',
+
   'POST /product/:id/like': 'ProductController.like_product',
 
   'POST /product/:id/unlike': 'ProductController.unlike_product',
@@ -76,5 +82,5 @@ module.exports.routes = {
 
   'GET /product/search/:query': 'ProductController.search',
 
-  'GET /category/:id/products': 'CategoryController.get_products'
+  'GET /category/:id': 'CategoryController.get'
 };

@@ -28,7 +28,11 @@ module.exports = {
   	sort_order: {
   		type: 'INTEGER',
   		defaultsTo: 0
-  	}
+  	},
+    products: {
+      collection: 'product',
+      via: 'categories'
+    }
   }
 
 };

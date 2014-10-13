@@ -72,5 +72,10 @@ module.exports.policies = {
 
   CommentController: {
     create: 'isAuthenticated'
+  },
+
+  MessageController: {
+    get_by_user: 'isAuthenticated',
+    create: 'isAuthenticated'
   }
 };
