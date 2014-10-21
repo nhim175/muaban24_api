@@ -76,6 +76,7 @@ module.exports.policies = {
 
   MessageController: {
     get_by_user: 'isAuthenticated',
-    create: 'isAuthenticated'
+    create: 'isAuthenticated',
+    index: 'isAuthenticated'
   }
 };
