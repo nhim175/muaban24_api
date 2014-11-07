@@ -70,6 +70,8 @@ module.exports.routes = {
 
   'POST /category/delete': 'CategoryController.delete',
 
+  'GET /product/query': 'ProductController.query',
+
   'GET /product/:id/comments': 'ProductController.get_comments',
 
   'GET /product/:id': 'ProductController.get',

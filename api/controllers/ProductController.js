@@ -6,13 +6,92 @@
  */
 
 var _ = require('underscore');
+var moment = require('moment');
 
 module.exports = {
   index: function(req, res) {
-    Product.find().populate('likes').populate('comments').populate('user').populate('categories').populate('images').exec(function(err, products) {
-      if (err) return res.send(500, err);
-      res.json(products);
+    Product.find()
+      .populate('likes')
+      .populate('comments')
+      .populate('user')
+      .populate('categories')
+      .populate('images')
+      .exec(function(err, products) {
+        if (err) return res.send(500, err);
+        res.json(products);
+      });
+  },
+
+  query: function(req, res) {
+    async.auto({
+      product: function(cb) {
+        var now = moment().format('YYYY-MM-DD HH:mm:ss');
+        var requestParams = req.allParams();
+        var categoryId = requestParams.category;
+        var timestamp = requestParams.timestamp || now;
+        var page = requestParams.page || 1;
+        var perPage = 10;
+        var query =  "SELECT p.* FROM category_products__product_categories AS cp ";
+        query += "INNER JOIN product AS p ON p.id = cp.product_categories ";
+        query += "WHERE p.createdAt < '" + timestamp + "' ";
+        if (parseInt(categoryId) > 0) {
+          query += "AND category_products = " + categoryId + " ";
+        }
+        query += "ORDER BY p.createdAt DESC ";
+        query += "LIMIT " + (page-1)*perPage + "," + perPage + " ";
+
+        Product.query(query, function(err, result) {
+          if (err) return res.serverError(err);
+          cb(null, {
+            timestamp: timestamp,
+            products: result
+          });
+        });
+      },
+
+      productImages: ['product', function(cb, results) {
+        var productIds = (results.product.products.length > 0) ? 
+          _.pluck(results.product.products, 'id').join(',') : -1;
+
+        var query = "SELECT * FROM file_images_file__product_images AS pf ";
+        query += "INNER JOIN file AS f ON f.id = pf.file_images_file ";
+        query += "WHERE pf.product_images IN (" + productIds + ")";
+        File.query(query, function(err, result) {
+          if (err) return res.serverError(err);
+          cb(null, _.groupBy(result, 'product_images'));
+        });
+      }],
+
+      productUser: ['product', function(cb, results) {
+        var userIds = (results.product.products.length > 0) ? 
+          _.pluck(results.product.products, 'user').join(',') : -1;
+
+        var query = "SELECT * FROM user WHERE id IN (" + userIds + ")";
+        User.query(query, function(err, result) {
+          if(err) return res.serverError(err);
+          cb(null, _.groupBy(result, 'id'));
+        });
+      }],
+
+      map: ['productImages', 'productUser', function(cb, results) {
+        var result = results.product;
+        result.products = result.products.map(function(product) {
+          product.images = results.productImages[product.id];
+          var user = results.productUser[product.user][0];
+          product.user = {
+            id: user.id,
+            name: user.name
+          };
+          return product;
+        });
+        return cb(null, result);
+      }],
+
+    }, function finish(err, result) {
+      if(err) return res.serverError(err);
+      return res.json(result.map);
     });
+    
   },
 
   get: function(req, res) {
