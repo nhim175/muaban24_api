@@ -72,6 +72,8 @@ module.exports.routes = {
 
   'GET /product/query': 'ProductController.query',
 
+  'GET /product/fetch': 'ProductController.fetch',
+
   'GET /product/:id/comments': 'ProductController.get_comments',
 
   'GET /product/:id': 'ProductController.get',
